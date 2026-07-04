@@ -1,7 +1,19 @@
 node_modules/
 dist/
 .env
-.env.local
+.env*.local
 supabase/.env.local
 *.log
 .kilo/
+
+# Next.js
+.next/
+out/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+
