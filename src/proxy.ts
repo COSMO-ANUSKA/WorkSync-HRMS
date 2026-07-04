@@ -51,7 +51,7 @@ export async function proxy(request: NextRequest) {
 
   if (user) {
     // Basic mock of role routing for UI skeleton
-    const role = 'employee'; // Mocked since we don't have a backend running
+    const role: string = 'employee'; // Mocked since we don't have a backend running
 
     if (request.nextUrl.pathname.startsWith('/admin') && role !== 'admin') {
       return NextResponse.redirect(new URL('/dashboard', request.url))

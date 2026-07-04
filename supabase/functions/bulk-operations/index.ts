@@ -49,7 +49,7 @@ export default async function handler(req: Request): Promise<Response> {
     const admin = getAdminClient();
 
     const { data: caller } = await admin.auth.getUser(jwt);
-    const callerId = caller.data?.user?.id;
+    const callerId = caller.user?.id;
     if (!callerId) {
       return errorResponse(401, 'UNAUTHORIZED', 'Invalid token');
     }

@@ -6,6 +6,7 @@ export const createClient = () => {
     return {
       auth: { getUser: async () => ({ data: { user: null }, error: null }) },
       from: () => ({ select: () => ({ eq: () => ({ single: () => ({ data: null }) }) }) })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any;
   }
   return createBrowserClient(

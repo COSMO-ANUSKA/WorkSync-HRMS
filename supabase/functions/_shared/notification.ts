@@ -1,4 +1,4 @@
-import { SupabaseClient } from 'jsr:@supabase/supabase-js@2';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 export interface NotificationPayload {
   org_id: string;
