@@ -114,8 +114,4 @@ do $$ begin
   end if;
 end $$;
 
-comment on policy "profile_pictures_owner_write" on storage.objects is 'Owner-only writes go into their own folder under profile-pictures';
-comment on policy "profile_pictures_owner_read" on storage.objects is 'Owner reads their own profile pictures; admin reads all';
-comment on policy "documents_owner_write" on storage.objects is 'Owner-only writes for the documents bucket';
-comment on policy "documents_owner_read" on storage.objects is 'Owner reads their own documents; admin reads all';
-comment on policy "documents_admin_delete" on storage.objects is 'Admin can delete any document object';
+
