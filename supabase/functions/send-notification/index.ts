@@ -52,7 +52,7 @@ export default async function handler(req: Request): Promise<Response> {
 
     // Verify the caller is a valid authenticated admin
     const { data: caller } = await admin.auth.getUser(jwt);
-    const callerId = caller.data?.user?.id;
+    const callerId = caller?.user?.id;
     if (!callerId) {
       return errorResponse(401, 'UNAUTHORIZED', 'Invalid token');
     }

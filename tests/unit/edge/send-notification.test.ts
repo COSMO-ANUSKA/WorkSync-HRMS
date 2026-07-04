@@ -22,6 +22,7 @@ describe('send-notification Edge Function', () => {
     const res = await mod.default(
       new Request('http://localhost', {
         method: 'POST',
+        headers: { Authorization: 'Bearer mock-jwt' },
         body: 'not-json',
       })
     );
@@ -37,6 +38,7 @@ describe('send-notification Edge Function', () => {
     const res = await mod.default(
       new Request('http://localhost', {
         method: 'POST',
+        headers: { Authorization: 'Bearer mock-jwt' },
         body: JSON.stringify({ org_id: 'bad' }),
       })
     );

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
+import { QueryProvider } from "@/shared/providers/QueryProvider";
+import { OfflineBanner } from "@/shared/components/OfflineBanner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,7 +27,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${outfit.variable} antialiased`} suppressHydrationWarning>
-        {children}
+        <QueryProvider>
+          <OfflineBanner />
+          {children}
+        </QueryProvider>
       </body>
     </html>
   );

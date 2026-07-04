@@ -64,7 +64,13 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
 
         {/* Sidebar Footer */}
         <div className="p-4 border-t border-surface-border mt-auto">
-          <button className="w-full flex items-center gap-3 px-3 py-2 text-sm text-accent-rose font-medium hover:bg-rose-50 rounded-lg transition-colors cursor-pointer">
+          <button 
+            onClick={async () => {
+              const { signout } = await import('@/app/login/actions')
+              await signout()
+            }}
+            className="w-full flex items-center gap-3 px-3 py-2 text-sm text-accent-rose font-medium hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+          >
             <LogOut className="w-5 h-5 text-accent-rose" />
             Sign Out
           </button>
