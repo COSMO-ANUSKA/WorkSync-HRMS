@@ -1,0 +1,21 @@
+﻿{
+  "name": "worksync-hrms",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:integration": "vitest run tests/integration",
+    "test:edge": "vitest run tests/unit/edge",
+    "test:db": "supabase test db",
+    "db:reset": "supabase db reset",
+    "gen:types": "supabase gen types typescript --local > src/types/database.ts"
+  },
+  "devDependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

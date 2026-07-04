@@ -1,0 +1,15 @@
+create policy "orgs_admin_read" on orgs for select using (is_admin());
+create policy "profiles_self_read" on profiles for select using (id = auth.uid() or is_admin());
+create policy "profiles_self_edit" on profiles for update using (id = auth.uid() or is_admin()) with check (id = auth.uid() or is_admin());
+create policy "attendance_self_read" on attendance for select using (employee_id = auth.uid() or is_admin());
+create policy "attendance_self_write" on attendance for insert with check (employee_id = auth.uid() or is_admin());
+create policy "attendance_self_update_checkout" on attendance for update using (employee_id = auth.uid() or is_admin()) with check (employee_id = auth.uid() or is_admin());
+create policy "leave_self_access" on leave_requests for select using (employee_id = auth.uid() or is_admin());
+create policy "leave_self_create" on leave_requests for insert with check (employee_id = auth.uid() or is_admin());
+create policy "leave_admin_update" on leave_requests for update using (is_admin()) with check (is_admin());
+create policy "payroll_self_read" on payroll for select using (employee_id = auth.uid() or is_admin());
+create policy "payroll_admin_write" on payroll for insert with check (is_admin());
+create policy "payroll_admin_update" on payroll for update using (is_admin()) with check (is_admin());
+create policy "audit_admin_read" on audit_log for select using (is_admin());
+create policy "notifications_self_read" on notifications for select using (user_id = auth.uid());
+create policy "notifications_admin_read_org" on notifications for select using (is_admin() and org_id = current_profile_org_id());
