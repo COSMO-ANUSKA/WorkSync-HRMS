@@ -1,6 +1,13 @@
 import { login, signup } from './actions'
 
-export default function LoginPage() {
+interface PageProps {
+  searchParams: Promise<{ error?: string }>
+}
+
+export default async function LoginPage({ searchParams }: PageProps) {
+  const resolvedParams = await searchParams
+  const hasError = !!resolvedParams.error
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50">
       <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-200 w-full max-w-md">
@@ -11,6 +18,12 @@ export default function LoginPage() {
           <h1 className="text-2xl font-bold font-heading text-primary">WorkSync HRMS</h1>
           <p className="text-text-muted mt-2">Sign in to your account</p>
         </div>
+
+        {hasError && (
+          <div className="mb-6 p-3 bg-rose-50 border border-rose-100 rounded-lg text-sm text-accent-rose text-center font-medium">
+            Wrong credential
+          </div>
+        )}
 
         <form className="space-y-4">
           <div>
