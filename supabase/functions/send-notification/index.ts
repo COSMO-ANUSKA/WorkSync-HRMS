@@ -22,6 +22,15 @@ export default async function handler(req: Request): Promise<Response> {
     return errorResponse(405, 'METHOD_NOT_ALLOWED', 'Use POST');
   }
 
+  const authHeader = req.headers.get('Authorization');
+  if (!authHeader) {
+    return errorResponse(401, 'UNAUTHORIZED', 'Missing Authorization header');
+  }
+  const jwt = authHeader.split(' ')[1] ?? '';
+  if (!jwt) {
+    return errorResponse(401, 'UNAUTHORIZED', 'Malformed Authorization header');
+  }
+
   let body: unknown;
   try {
     body = await req.json();
@@ -40,6 +49,27 @@ export default async function handler(req: Request): Promise<Response> {
 
   try {
     const admin = getAdminClient();
+
+    // Verify the caller is a valid authenticated admin
+    const { data: caller } = await admin.auth.getUser(jwt);
+    const callerId = caller.data?.user?.id;
+    if (!callerId) {
+      return errorResponse(401, 'UNAUTHORIZED', 'Invalid token');
+    }
+
+    const { data: callerProfile, error: callerErr } = await admin
+      .from('profiles')
+      .select('org_id, role')
+      .eq('id', callerId)
+      .single();
+
+    if (callerErr || !callerProfile) {
+      return errorResponse(403, 'FORBIDDEN', 'No profile for caller');
+    }
+    if (callerProfile.role !== 'admin') {
+      return errorResponse(403, 'FORBIDDEN', 'Admin privileges required');
+    }
+
     await dispatchNotification(admin, payload);
     return corsResponse(200, { ok: true });
   } catch (err) {

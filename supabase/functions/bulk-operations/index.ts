@@ -26,7 +26,10 @@ export default async function handler(req: Request): Promise<Response> {
   if (!authHeader) {
     return errorResponse(401, 'UNAUTHORIZED', 'Missing Authorization header');
   }
-  const jwt = authHeader.replace('Bearer ', '');
+  const jwt = authHeader.split(' ')[1] ?? '';
+  if (!jwt) {
+    return errorResponse(401, 'UNAUTHORIZED', 'Malformed Authorization header');
+  }
 
   let body: unknown;
   try {
