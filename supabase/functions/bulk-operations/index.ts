@@ -80,6 +80,7 @@ export default async function handler(req: Request): Promise<Response> {
         })
         .in('id', data.request_ids)
         .eq('org_id', callerProfile.org_id)
+        .eq('status', 'pending')          // only approve requests still awaiting review
         .select('id, employee_id, org_id');
 
       if (updateErr) {
