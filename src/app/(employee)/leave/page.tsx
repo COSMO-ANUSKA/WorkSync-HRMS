@@ -11,7 +11,19 @@ import { X, CalendarPlus, Search, Filter, UploadCloud, Plane, Activity, CheckCir
 export default function LeavePage() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [remarks, setRemarks] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const getDuration = () => {
+    if (!startDate || !endDate) return "-- Days";
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = end.getTime() - start.getTime();
+    if (diffTime < 0) return "0 Days (Invalid Range)";
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    return `${diffDays} ${diffDays === 1 ? "Day" : "Days"}`;
+  };
 
   const mockLeaves = [
     { id: 1, type: "Paid Leave", start: "15 Dec 2023", end: "20 Dec 2023", duration: "5 Days", status: "pending", color: "bg-blue-500" },
@@ -35,8 +47,24 @@ export default function LeavePage() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Annual Allowance */}
+        <div className="bg-surface border border-surface-border rounded-xl p-6 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xs font-semibold text-text-muted uppercase tracking-wider">Annual Allowance</h3>
+            <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center">
+              <Plane className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="flex items-end gap-2 mb-4">
+            <span className="text-3xl font-bold font-heading text-primary">24</span>
+            <span className="text-sm font-medium text-text-muted mb-1">Days</span>
+          </div>
+          <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+            <div className="h-full bg-blue-500 w-[100%]"></div>
+          </div>
+        </div>
 
-
+        {/* Used */}
         <div className="bg-surface border border-surface-border rounded-xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-xs font-semibold text-text-muted uppercase tracking-wider">Used</h3>
@@ -49,11 +77,26 @@ export default function LeavePage() {
             <span className="text-sm font-medium text-text-muted mb-1">Days</span>
           </div>
           <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-            <div className="h-full bg-emerald-500 w-[40%]"></div>
+            <div className="h-full bg-emerald-500 w-[41.6%]"></div>
           </div>
         </div>
 
-
+        {/* Available */}
+        <div className="bg-surface border border-surface-border rounded-xl p-6 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xs font-semibold text-text-muted uppercase tracking-wider">Available</h3>
+            <div className="w-8 h-8 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center">
+              <Clock className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="flex items-end gap-2 mb-4">
+            <span className="text-3xl font-bold font-heading text-primary">14</span>
+            <span className="text-sm font-medium text-text-muted mb-1">Days</span>
+          </div>
+          <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+            <div className="h-full bg-orange-500 w-[58.3%]"></div>
+          </div>
+        </div>
       </div>
 
       <div className="bg-surface border border-surface-border rounded-xl shadow-sm">
@@ -176,17 +219,27 @@ export default function LeavePage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-sm font-medium text-text-main">Start Date</label>
-                  <input type="date" className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-text-main outline-none focus:ring-2 focus:ring-accent-blue focus:border-transparent" />
+                  <input 
+                    type="date" 
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-text-main outline-none focus:ring-2 focus:ring-accent-blue focus:border-transparent" 
+                  />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-sm font-medium text-text-main">End Date</label>
-                  <input type="date" className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-text-main outline-none focus:ring-2 focus:ring-accent-blue focus:border-transparent" />
+                  <input 
+                    type="date" 
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-text-main outline-none focus:ring-2 focus:ring-accent-blue focus:border-transparent" 
+                  />
                 </div>
               </div>
 
               <div className="flex items-center justify-between py-2 border-b border-slate-100">
                 <span className="text-sm font-medium text-text-main">Estimated Duration:</span>
-                <span className="text-sm font-bold text-primary font-heading">-- Days</span>
+                <span className="text-sm font-bold text-primary font-heading">{getDuration()}</span>
               </div>
 
               <div>

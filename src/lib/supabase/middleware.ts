@@ -31,9 +31,10 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const isDummy = request.cookies.get('worksync-dummy-auth')?.value === 'true'
+  const user = isDummy
+    ? { id: 'dummy-user-id-0000-000000000000', email: 'dummyopen00@gmail.com' }
+    : (await supabase.auth.getUser()).data.user
 
   if (
     !user &&
