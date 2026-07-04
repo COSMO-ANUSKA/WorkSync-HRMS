@@ -26,7 +26,10 @@ export default async function handler(req: Request): Promise<Response> {
   if (!authHeader) {
     return errorResponse(401, 'UNAUTHORIZED', 'Missing Authorization header');
   }
-  const jwt = authHeader.replace('Bearer ', '');
+  const jwt = authHeader.split(' ')[1] ?? '';
+  if (!jwt) {
+    return errorResponse(401, 'UNAUTHORIZED', 'Malformed Authorization header');
+  }
 
   let body: unknown;
   try {
@@ -77,6 +80,7 @@ export default async function handler(req: Request): Promise<Response> {
         })
         .in('id', data.request_ids)
         .eq('org_id', callerProfile.org_id)
+        .eq('status', 'pending')          // only approve requests still awaiting review
         .select('id, employee_id, org_id');
 
       if (updateErr) {

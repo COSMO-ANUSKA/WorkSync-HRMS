@@ -27,7 +27,10 @@ export default async function handler(req: Request): Promise<Response> {
   if (!authHeader) {
     return errorResponse(401, 'UNAUTHORIZED', 'Missing Authorization header');
   }
-  const jwt = authHeader.replace('Bearer ', '');
+  const jwt = authHeader.split(' ')[1] ?? '';
+  if (!jwt) {
+    return errorResponse(401, 'UNAUTHORIZED', 'Malformed Authorization header');
+  }
 
   let body: unknown;
   try {
@@ -81,6 +84,7 @@ export default async function handler(req: Request): Promise<Response> {
       .from('payroll')
       .select('id')
       .eq('employee_id', data.employee_id)
+      .eq('org_id', callerProfile.org_id)   // ensure the record belongs to the caller's org
       .maybeSingle();
 
     let result;
